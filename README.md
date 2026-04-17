@@ -1,73 +1,92 @@
-# React + TypeScript + Vite
+#  Task Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/Punyashreekm/task-management-app--frontend)
 
-Currently, two official plugins are available:
+A sleek, premium web application built with React, Vite, and Tailwind CSS. This dashboard allows users to seamlessly manage their tasks, featuring complete CRUD functionality, complex filtering, and robust state management utilizing RTK Query.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
 
-## React Compiler
+- **Modern & Premium UI:** Designed with a stunning, high-contrast light mode, utilizing Tailwind CSS and Framer Motion for beautiful micro-animations and transitions.
+- **Complete CRUD Operations:** Create, Read, Update, and Delete tasks instantly.
+- **Advanced State Management:** State is perfectly synchronized using **Redux Toolkit Query (RTK Query)**, simulating backend delays and managing loading/error states cleanly out of the box with tag invalidation.
+- **Smart Filtering & Searching:** 
+  - Search any task by title instantly.
+  - Filter tasks by Status (Complete, Pending).
+  - Filter tasks by Priority (High, Medium, Low).
+- **Pagination:** Automatically chunks your tasks into clean, manageable pages preventing UI clutter.
+- **Persistent Storage:** Tasks are safely preserved in the browser's LocalStorage, mimicking a real database backend.
+- **Notifications:** Integrated `react-hot-toast` displays gorgeous toast notifications upon any task mutations (editing, deleting, or status flipping).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Tech Stack
 
-## Expanding the ESLint configuration
+- **Framework:** [React 19](https://react.dev/)
+- **Bundler:** [Vite](https://vitejs.dev/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **State Management:** [Redux Toolkit (RTK Query)](https://redux-toolkit.js.org/rtk-query/overview)
+- **Icons:** [react-icons (Feather)](https://react-icons.github.io/react-icons/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Date Utilities:** [date-fns](https://date-fns.org/)
+- **Language:** TypeScript
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Follow these steps to set up and run the frontend application locally.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### Installation
+
+1. **Clone the repository** (or navigate to the workspace directory):
+   ```bash
+   cd task-management-dashboard
+   ```
+
+2. **Install all dependencies:**
+   Using npm:
+   ```bash
+   npm install
+   ```
+   Or using yarn/pnpm:
+   ```bash
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser:**
+   Navigate into the local network URL provided in your console (usually `http://localhost:5173/`).
+
+## 📁 Source Code Structure
+
+```
+├── public/                 # Static assets (Favicons, etc.)
+├── src/                    
+│   ├── components/         # All React Component modules
+│   │   ├── TaskDashboard   # Main Application Layout
+│   │   ├── TaskFilters     # Search & Sidebar Logic
+│   │   ├── TaskForm        # Creation Form UI
+│   │   ├── TaskItem        # Individual List Item Card
+│   │   └── TaskList        # Rendering Engine for Pagination/List Map
+│   ├── store/              # Redux State & Store Hooks
+│   │   ├── apiSlice.ts     # RTK Query Setup (Mock Backend & LocalStorage logic)
+│   │   ├── hooks.ts        # Typed Selectors/Dispatchers
+│   │   └── store.ts        # Store Initialization & Middleware Configuration
+│   ├── types/              # Global TypeScript Interfaces
+│   ├── App.tsx             # Root Application Component
+│   ├── main.tsx            # React DOM Entry Point & Providers
+│   └── index.css           # Tailwind Configuration Import
+├── eslint.config.js        # Linter Settings
+├── vite.config.ts          # Vite Settings
+├── tsconfig.json           # TS Configurations
+└── package.json            # Scripts & Dependency Manifest
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🤝 Contributing
+Contributions, issues, and feature requests are always welcome! Feel free to fork the repository to implement larger architectural additions.
