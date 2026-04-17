@@ -9,37 +9,37 @@ interface TaskFiltersProps {
 
 const TaskFilters: React.FC<TaskFiltersProps> = ({ filters, onFilterChange }) => {
   return (
-    <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur-sm space-y-6">
+    <div className="bg-white/80 border border-slate-200/80 shadow-sm rounded-2xl p-6 backdrop-blur-sm space-y-6">
       <div className="flex items-center gap-2 mb-2">
-        <FiFilter className="text-indigo-400" />
-        <h3 className="font-semibold text-slate-200">Filters & Search</h3>
+        <FiFilter className="text-blue-500" />
+        <h3 className="font-semibold text-slate-800">Filters & Search</h3>
       </div>
 
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <FiSearch className="text-slate-500" />
+          <FiSearch className="text-slate-400" />
         </div>
         <input
           type="text"
           placeholder="Search items..."
           value={filters.searchQuery}
           onChange={(e) => onFilterChange({ ...filters, searchQuery: e.target.value })}
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+          className="w-full bg-white border border-slate-300 rounded-xl py-3 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm"
         />
       </div>
 
       <div className="space-y-4">
         <div>
           <label className="block text-xs uppercase tracking-wider text-slate-500 mb-2 font-medium">Status</label>
-          <div className="flex bg-slate-900 p-1 rounded-xl">
+          <div className="flex bg-slate-100 p-1 rounded-xl">
             {['All', 'Pending', 'Completed'].map((status) => (
               <button
                 key={status}
                 onClick={() => onFilterChange({ ...filters, statusFilter: status as any })}
                 className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all ${
                   filters.statusFilter === status 
-                    ? 'bg-slate-700 text-white shadow-md' 
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    ? 'bg-white text-slate-900 shadow-sm' 
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 {status}
@@ -57,8 +57,8 @@ const TaskFilters: React.FC<TaskFiltersProps> = ({ filters, onFilterChange }) =>
                 onClick={() => onFilterChange({ ...filters, priorityFilter: priority as any })}
                 className={`py-2 px-3 text-sm rounded-xl font-medium border transition-all ${
                   filters.priorityFilter === priority 
-                    ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300' 
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600'
+                    ? 'bg-blue-50 border-blue-200 text-blue-700' 
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {priority}

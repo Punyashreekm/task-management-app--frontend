@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { Task } from '../types';
-import { useAppDispatch } from '../store/hooks';
-import { updateTask, deleteTask } from '../store/taskSlice';
+import { useUpdateTaskMutation, useDeleteTaskMutation } from '../store/apiSlice';
 import { FiCheckCircle, FiCircle, FiTrash2, FiEdit2, FiClock } from 'react-icons/fi';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'react-hot-toast';
@@ -12,20 +11,21 @@ interface TaskItemProps {
 }
 
 const priorityColors = {
-  High: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-  Medium: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  Low: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  High: 'bg-rose-50 text-rose-700 border-rose-200',
+  Medium: 'bg-amber-50 text-amber-700 border-amber-200',
+  Low: 'bg-emerald-50 text-emerald-700 border-emerald-200',
 };
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
-  const dispatch = useAppDispatch();
+  const [updateTask] = useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
 
   const handleToggleStatus = () => {
     const newStatus = task.status === 'Completed' ? 'Pending' : 'Completed';
     // Optimistic-like UI: we just dispatch and let Redux handle it
-    dispatch(updateTask({ ...task, status: newStatus }))
+    updateTask({ ...task, status: newStatus })
       .unwrap()
       .then(() => toast.success(`Task marked as ${newStatus}`, { icon: newStatus === 'Completed' ? '👏' : '⏳' }))
       .catch(() => toast.error('Failed to update task'));
@@ -33,7 +33,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this task?')) {
-      dispatch(deleteTask(task.id))
+      deleteTask(task.id)
         .unwrap()
         .then(() => toast.success('Task deleted'))
         .catch(() => toast.error('Failed to delete task'));
@@ -45,7 +45,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       toast.error('Title cannot be empty');
       return;
     }
-    dispatch(updateTask({ ...task, title: editTitle }))
+    updateTask({ ...task, title: editTitle })
       .unwrap()
       .then(() => {
         setIsEditing(false);
@@ -63,14 +63,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       whileHover={{ scale: 1.01 }}
       className={`group flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 rounded-2xl border transition-all ${
         task.status === 'Completed' 
-          ? 'bg-slate-800/20 border-slate-700/30 opacity-75' 
-          : 'bg-slate-800/60 border-slate-700 hover:border-indigo-500/50 hover:bg-slate-800/80 hover:shadow-lg hover:shadow-indigo-500/5'
+          ? 'bg-slate-50 border-slate-200/50 opacity-60' 
+          : 'bg-white border-slate-200 hover:border-blue-400 hover:shadow-md hover:shadow-blue-500/5 shadow-sm'
       }`}
     >
       <button 
         onClick={handleToggleStatus}
         className={`flex-shrink-0 mt-1 sm:mt-0 text-2xl transition-colors ${
-          task.status === 'Completed' ? 'text-emerald-400 hover:text-emerald-300' : 'text-slate-500 hover:text-indigo-400'
+          task.status === 'Completed' ? 'text-emerald-500 hover:text-emerald-600' : 'text-slate-300 hover:text-blue-500'
         }`}
       >
         {task.status === 'Completed' ? <FiCheckCircle /> : <FiCircle />}
@@ -85,11 +85,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             onChange={(e) => setEditTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit()}
             onBlur={handleSaveEdit}
-            className="w-full bg-slate-900 border border-indigo-500 rounded-lg px-3 py-1.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+            className="w-full bg-white border border-blue-500 rounded-lg px-3 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm"
           />
         ) : (
           <h3 className={`text-lg font-medium truncate transition-all duration-300 ${
-            task.status === 'Completed' ? 'line-through text-slate-500' : 'text-slate-200'
+            task.status === 'Completed' ? 'line-through text-slate-400' : 'text-slate-800'
           }`}>
             {task.title}
           </h3>
@@ -112,7 +112,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
         {!isEditing && (
           <button 
             onClick={() => setIsEditing(true)}
-            className="p-2 text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition-colors"
+            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
             title="Edit Task"
           >
             <FiEdit2 />
@@ -120,7 +120,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
         )}
         <button 
           onClick={handleDelete}
-          className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
           title="Delete Task"
         >
           <FiTrash2 />

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useAppDispatch } from '../store/hooks';
-import { addTask } from '../store/taskSlice';
+import { useAddTaskMutation } from '../store/apiSlice';
 import type { TaskPriority } from '../types';
 import { toast } from 'react-hot-toast';
 import { FiX } from 'react-icons/fi';
@@ -10,7 +9,7 @@ interface TaskFormProps {
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
-  const dispatch = useAppDispatch();
+  const [createTask] = useAddTaskMutation();
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState<TaskPriority>('Medium');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +23,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
 
     setIsSubmitting(true);
     try {
-      await dispatch(addTask({ title: title.trim(), priority })).unwrap();
+      await createTask({ title: title.trim(), priority }).unwrap();
       toast.success('Task created successfully!');
       onClose();
     } catch (err) {
@@ -35,12 +34,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="bg-slate-800 border border-slate-700/80 rounded-2xl shadow-xl overflow-hidden shadow-black/50">
-      <div className="flex justify-between items-center p-5 border-b border-slate-700/80 bg-slate-800/50">
-        <h2 className="text-xl font-bold text-white">Create New Task</h2>
+    <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden shadow-slate-200/50">
+      <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/50">
+        <h2 className="text-xl font-bold text-slate-900">Create New Task</h2>
         <button 
           onClick={onClose}
-          className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-xl transition-all"
+          className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all"
         >
           <FiX />
         </button>
@@ -48,7 +47,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
 
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-slate-300 mb-2">
+          <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-2">
             Task Name
           </label>
           <input
@@ -56,14 +55,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-inner"
+            className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
             placeholder="E.g., Complete project proposal"
             autoFocus
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-3">
+          <label className="block text-sm font-medium text-slate-700 mb-3">
             Priority Level
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -75,11 +74,11 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                 className={`py-2 px-3 rounded-xl text-sm font-medium border transition-all ${
                   priority === p
                     ? p === 'High' 
-                      ? 'bg-rose-500/20 border-rose-500 text-rose-300'
+                      ? 'bg-rose-50 border-rose-200 text-rose-700'
                       : p === 'Medium'
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                      : 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500'
+                      ? 'bg-amber-50 border-amber-200 text-amber-700'
+                      : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {p}
@@ -92,14 +91,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-xl transition-colors"
+            className="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 py-3 px-4 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-medium rounded-xl shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+            className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium rounded-xl shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
           >
             {isSubmitting ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
